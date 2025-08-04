@@ -108,7 +108,7 @@ if not df_filtered.empty:
     rupee = '&#8377;'
     st.markdown(f"""
         <div style='text-align:center; font-size:2em; font-weight:bold; letter-spacing:2px; color:#E68C3A; text-transform:uppercase;'>
-            THIS MONTH EXPENSE: <span style='color:{this_color};'>{rupee} {summary_total:,}</span>
+            {month.upper()} {year} EXPENSE: <span style='color:{this_color};'>{rupee} {summary_total:,}</span>
         </div>
         <div style='text-align:center; font-size:1.1em; color:#E68C3A; margin-top:0.2em;'>
             Last month expense: <span style='color:#fff;'>{rupee} {prev_total:,}</span>
@@ -249,6 +249,15 @@ else:
             st.markdown(f"**Total Amount: <span style='color:#E68C3A;font-size:1.2em'>{total_amt:,}</span>**", unsafe_allow_html=True)
             df_to_show = display_df[["date_str", "label", "amount", "comment", "timestamp"]].copy()
             df_to_show.index += 1
+            st.table(df_to_show)
+            # Add download button for filtered table
+            table_csv = df_to_show.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label="D",
+                data=table_csv,
+                file_name=f'all_entries_{date_str.replace(" ", "_")}_{selected_label}.csv',
+                mime='text/csv'
+            )
 
         # --- Multi-Line Chart for Summary Totals for All Months ---
         st.divider()
